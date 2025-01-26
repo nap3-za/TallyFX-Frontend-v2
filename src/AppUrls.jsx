@@ -15,6 +15,8 @@ const URLS = {
 	ACCOUNT_SETTINGS: "account/settings",
 
 	Dashboard: "/",
+
+	TRADES_DASHBOARD: "trades/",
 }
 
 

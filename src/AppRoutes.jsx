@@ -17,6 +17,8 @@ import ResetPasswordConfirmDone from "./pages/authentication/password-reset/Rese
 import Account from "./pages/account/Account";
 import AccountSettings from "./pages/account/AccountSettings";
 
+import TradesDashboard from "./pages/trade/Dashboard";
+
 import PageNotFound from "./pages/misc/error/PageNotFound";
 import Redirect from "./components/misc/Redirect";
 
@@ -34,6 +36,7 @@ function AppRoutes(props) {
 	const URL_RESET_PASSWORD_CONFIRM_DONE = getUrl("RESET_PASSWORD_CONFIRM_DONE", true);
 	const URL_ACCOUNT = getUrl("ACCOUNT", true);
 	const URL_ACCOUNT_SETTINGS = getUrl("ACCOUNT_SETTINGS", true);
+	const URL_TRADES_DASHBOARD = getUrl("TRADES_DASHBOARD", true);
 
 
 	return (
@@ -53,6 +56,8 @@ function AppRoutes(props) {
 
 				<Route exact path={URL_ACCOUNT} element={<Account />} />
 				<Route exact path={URL_ACCOUNT_SETTINGS} element={<AccountSettings />} />
+
+				<Route exact path={URL_TRADES_DASHBOARD} element={<TradesDashboard />} />
 
 				{/* Redirects */}
 				<Route exact path={URL_SIGN_IN} element={<Navigate to="/" />} />

@@ -22,7 +22,6 @@ export const createTrade = (createTradeData) => (dispatch, getState) => {
 	axios.post(EP_TRADE_VIEWSET, createTradeData, tokenConfigurator(getState))
 		.then(response => {
 			dispatch(createMessage("Trade logged"));
-			console.log(response);
 			dispatch({type: LOADING_OFF});
 		}).catch(error => {
 			dispatch({type: LOADING_OFF});
@@ -31,3 +30,4 @@ export const createTrade = (createTradeData) => (dispatch, getState) => {
 			}
 		})
 }
+

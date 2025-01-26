@@ -32,12 +32,23 @@ export const getFieldChoices = (populateFieldChoices, formID) => (dispatch, getS
 
 	axios.get(FIELD_CHOICES_EP, tokenConfigurator(getState))
 		.then(response => {
-			console.log(response);
 			populateFieldChoices(response.data);
 		}).catch(error => {
 			if (error.response) {
 				dispatch(raiseErrors(error.response.data, error.response.status));
 			}
 			populateFieldChoices(null);
+		})
+}
+
+export const getPaginatedObjects = (populate, currentPage) => (dispatch, getState) => {
+	axios.get(currentPage, tokenConfigurator(getState))
+		.then(response => {
+			populate(response.data);
+		}).catch(error => {
+			if (error.response) {
+				dispatch(raiseErrors(error.response.data, error.response.status));
+			}
+			populate(null);
 		})
 }
