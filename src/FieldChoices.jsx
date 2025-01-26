@@ -16,14 +16,15 @@ export const ORDER_TYPES_RAW = {
 	SEL: "Sell",
 }
 
-function getOptions(field_choices_raw) {
+function getOptions(field_name, field_choices_raw) {
 	// loop through above field choices and retrieve options
-	return <>
-		<option value="PLH">Lorem</option>
-		<option value="IPS">Ipsum</option>
-		<option value="DOL">Dolor</option>
-	</>
+	return [<>
+		<option value="LOW">{field_name}</option>
+		<option value="LOW">Low</option>
+		<option value="BUY">Buy</option>
+		<option value="LOW">Dolor</option>
+	</>]
 }
 
-export const RISK_APPETITES = getOptions(RISK_APPETITES_RAW);
-export const ORDER_TYPES = getOptions(ORDER_TYPES_RAW);
+export const RISK_APPETITES = getOptions("Risk appetite", RISK_APPETITES_RAW);
+export const ORDER_TYPES = getOptions("Order type", ORDER_TYPES_RAW);

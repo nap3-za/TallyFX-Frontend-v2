@@ -1,49 +1,57 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState, useRef, Suspense } from "react";
+import { Link, Navigate, useParams } from "react-router-dom";
 import PropTypes from  "prop-types"
 import { connect } from "react-redux";
 
 import { createTrade } from "../../reduxApp/actions/trade/actions";
 
-import { Select } from "flowbite-react";
+import { Select, Label } from "flowbite-react";
+
+import Spinner from "../../components/misc/Spinner";
+import { getUrl } from "../../AppUrls";
 
 import {
 	RISK_APPETITES,
 	ORDER_TYPES,
 } from "../../FieldChoices"
 
+import { initFlowbite } from "flowbite";
+
 
 function Dashboard(props) {
 	const {user} = props;
 
 	// To be fetched from backend
-	const SYMBOLS = <>
-		<option value="">Symbols</option>
+	const SYMBOLS = [
+		<>
+		<option value="LOW">Symbol</option>
 		<option value="PLH">January</option>
 		<option value="PLH">Day Trades</option>
 		<option value="PLH">Indices</option>
 		<option value="PLH">Low Risk</option>
-	</>
-	const JOURNALS = <>
-		<option value="">Journal</option>
+		</>
+	]
+	const JOURNALS = [<>
+		<option value="LOW">Journal</option>
 		<option value="PLH">January</option>
 		<option value="PLH">Day Trades</option>
 		<option value="PLH">Indices</option>
 		<option value="PLH">Low Risk</option>
-	</>
-	const TRADING_MODELS = <>
-		<option value="">Trading models</option>
+	</>]
+	const TRADING_MODELS = [<>
+		<option value="LOW">Trading models</option>
 		<option value="PLH">January</option>
 		<option value="PLH">Day Trades</option>
 		<option value="PLH">Indices</option>
 		<option value="PLH">Low Risk</option>
-	</>
-	const ENTRY_MODELS = <>
-		<option value="">Entry models</option>
+	</>]
+	const ENTRY_MODELS = [<>
+		<option value="LOW">Entry models</option>
 		<option value="PLH">January</option>
 		<option value="PLH">Day Trades</option>
 		<option value="PLH">Indices</option>
 		<option value="PLH">Low Risk</option>
-	</>
+	</>]
 
 
 	// - - - - -
@@ -79,6 +87,19 @@ function Dashboard(props) {
 
 	function clearCreateTradeForm() {
 	  createTradeForm.current && createTradeForm.current.reset();
+	  setCreateTradeData((prevState) => {
+		return {
+			symbol: null,
+			journal: null, trading_model: null, entry_model: null,
+			risk_appetite: null, riskreward_profile: null,
+			order_type: null,
+			fill_price: null, exit_price: null,
+			stoploss_price: null, takeprofit_price: null,
+			execution_time: null, exit_time: null,
+			trade_review: null,
+		}
+	  })
+
 	}
 
 	
@@ -107,7 +128,7 @@ function Dashboard(props) {
 		<div id="add-trade-modal" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 bg-gray-500 bg-opacity-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" tabIndex="-1" aria-hidden="true" >
 			<div className="relative w-full h-full max-w-2xl px-4 md:h-auto">
 				
-				<div className="relative bg-white rounded-lg shadow dark:bg-gray-800">
+				<div className="relative bg-white rounded-lg mt-[400px] shadow dark:bg-gray-800">
 					
 					<div className="flex items-start justify-between p-5 border-b rounded-t dark:border-gray-700">
 						<h3 className="text-xl font-semibold dark:text-white">
@@ -122,7 +143,7 @@ function Dashboard(props) {
 						
 							<div className="grid grid-cols-6 gap-6">
 					
-								<div className="w-full">
+								<div className="col-span-6 sm:col-span-3">
 									<div className="mb-2 block">
 									<Label htmlFor="symbol" value="Select your symbol" />
 									</div>
@@ -130,7 +151,7 @@ function Dashboard(props) {
 										{...SYMBOLS}
 									</Select>
 								</div>
-								<div className="w-full">
+								<div className="col-span-6 sm:col-span-3">
 									<div className="mb-2 block">
 									<Label htmlFor="journal" value="Select your journal" />
 									</div>
@@ -140,7 +161,7 @@ function Dashboard(props) {
 								</div>
 
 
-								<div className="w-full">
+								<div className="col-span-6 sm:col-span-3">
 									<div className="mb-2 block">
 									<Label htmlFor="trading_model" value="Select your trading_model" />
 									</div>
@@ -148,7 +169,7 @@ function Dashboard(props) {
 										{...TRADING_MODELS}
 									</Select>
 								</div>
-								<div className="w-full">
+								<div className="col-span-6 sm:col-span-3">
 									<div className="mb-2 block">
 									<Label htmlFor="entry_model" value="Select your entry_model" />
 									</div>
@@ -158,7 +179,7 @@ function Dashboard(props) {
 								</div>
 
 
-								<div className="w-full">
+								<div className="col-span-6">
 									<div className="mb-2 block">
 									<Label htmlFor="order_type" value="Select your order_type" />
 									</div>
@@ -166,7 +187,7 @@ function Dashboard(props) {
 										{...ORDER_TYPES}
 									</Select>
 								</div>
-								<div className="w-full">
+								<div className="col-span-6 sm:col-span-3">
 									<div className="mb-2 block">
 									<Label htmlFor="risk_appetite" value="Select your risk_appetite" />
 									</div>
@@ -212,17 +233,17 @@ function Dashboard(props) {
 									<label htmlFor="execution_time" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 										Execution time
 									</label>
-									<input type="time" name="execution_time" placeholder="" onChange={handleCreateTradeChange} id="execution_time" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+									<input type="text" name="execution_time" placeholder="YYYY-MM-DD hh:mm:ss" onChange={handleCreateTradeChange} id="execution_time" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
 								</div>
 								<div className="col-span-6 sm:col-span-3">
 									<label htmlFor="exit_time" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
 										Exit time
 									</label>
-									<input type="time" name="exit_time" placeholder="" onChange={handleCreateTradeChange} id="exit_time" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+									<input type="text" name="exit_time" placeholder="" onChange={handleCreateTradeChange} id="exit_time" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
 								</div>
 
 								<div className="col-span-6">
-									<label htmlFor="trade_review" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Adages</label>
+									<label htmlFor="trade_review" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Trade review</label>
 									<textarea name="trade_review" placeholder="Lorem ipsum dolor et" onChange={handleCreateTradeChange} id="trade_review" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"></textarea>
 								</div>
 							</div> 
