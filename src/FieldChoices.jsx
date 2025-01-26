@@ -17,13 +17,14 @@ export const ORDER_TYPES_RAW = {
 }
 
 function getOptions(field_name, field_choices_raw) {
-	// loop through above field choices and retrieve options
-	return [<>
-		<option value="LOW">{field_name}</option>
-		<option value="LOW">Low</option>
-		<option value="BUY">Buy</option>
-		<option value="LOW">Dolor</option>
-	</>]
+	let options = []
+	options.push(<option value="">{field_name}</option>)
+
+	for (const [key, value] of Object.entries(field_choices_raw)) {
+		options.push(<option value={key}>{value}</option>)
+	}
+
+	return options;
 }
 
 export const RISK_APPETITES = getOptions("Risk appetite", RISK_APPETITES_RAW);

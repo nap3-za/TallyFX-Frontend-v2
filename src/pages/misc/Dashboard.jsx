@@ -57,7 +57,7 @@ function Dashboard(props) {
 	// - - - - -
 	const createTradeForm = useRef(null);
 
-	const [createTradeData, setCreateTradeData] = useState({
+	const createTradeDataInitial = {
 		symbol: null,
 		journal: null, trading_model: null, entry_model: null,
 		risk_appetite: null, riskreward_profile: null,
@@ -65,7 +65,10 @@ function Dashboard(props) {
 		fill_price: null, exit_price: null,
 		stoploss_price: null, takeprofit_price: null,
 		execution_time: null, exit_time: null,
-		trade_review: null,
+		trade_review: null,	
+	}
+	const [createTradeData, setCreateTradeData] = useState({
+		...createTradeDataInitial
 	})
 
 	function handleCreateTradeChange(event) {
@@ -89,14 +92,7 @@ function Dashboard(props) {
 	  createTradeForm.current && createTradeForm.current.reset();
 	  setCreateTradeData((prevState) => {
 		return {
-			symbol: null,
-			journal: null, trading_model: null, entry_model: null,
-			risk_appetite: null, riskreward_profile: null,
-			order_type: null,
-			fill_price: null, exit_price: null,
-			stoploss_price: null, takeprofit_price: null,
-			execution_time: null, exit_time: null,
-			trade_review: null,
+			...createTradeDataInitial
 		}
 	  })
 
