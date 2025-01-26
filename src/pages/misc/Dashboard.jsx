@@ -4,6 +4,7 @@ import PropTypes from  "prop-types"
 import { connect } from "react-redux";
 
 import { createTrade } from "../../reduxApp/actions/trade/actions";
+import { getFieldChoices } from "../../reduxApp/actions/app/actions";
 
 import { Select, Label } from "flowbite-react";
 
@@ -13,48 +14,44 @@ import { getUrl } from "../../AppUrls";
 import {
 	RISK_APPETITES,
 	ORDER_TYPES,
+
+	FC_ADD_TRADE,
+
+	getOptions,
 } from "../../FieldChoices"
+
 
 import { initFlowbite } from "flowbite";
 
 
 function Dashboard(props) {
-	const {user} = props;
 
-	// To be fetched from backend
-	const SYMBOLS = [
-		<>
-		<option value="LOW">Symbol</option>
-		<option value="PLH">January</option>
-		<option value="PLH">Day Trades</option>
-		<option value="PLH">Indices</option>
-		<option value="PLH">Low Risk</option>
-		</>
-	]
-	const JOURNALS = [<>
-		<option value="LOW">Journal</option>
-		<option value="PLH">January</option>
-		<option value="PLH">Day Trades</option>
-		<option value="PLH">Indices</option>
-		<option value="PLH">Low Risk</option>
-	</>]
-	const TRADING_MODELS = [<>
-		<option value="LOW">Trading models</option>
-		<option value="PLH">January</option>
-		<option value="PLH">Day Trades</option>
-		<option value="PLH">Indices</option>
-		<option value="PLH">Low Risk</option>
-	</>]
-	const ENTRY_MODELS = [<>
-		<option value="LOW">Entry models</option>
-		<option value="PLH">January</option>
-		<option value="PLH">Day Trades</option>
-		<option value="PLH">Indices</option>
-		<option value="PLH">Low Risk</option>
-	</>]
+    const [fieldChoices, setFieldChoices] = useState({
+      symbols: null,
+      journals: null,
+      tradingModels: null,
+      entryModels: null,
+    })
 
+	function handleAddTradeClick(event) {
+	    const populateFieldChoices = (data) => {setFieldChoices(data)}
+        props.getFieldChoices(populateFieldChoices, FC_ADD_TRADE);
+	}
+
+    let SYMBOLS = [];
+    let JOURNALS = [];
+    let ENTRY_MODELS = [];
+    let TRADING_MODELS = [];
+
+    if (fieldChoices !== null && fieldChoices.symbols !== null) {
+    	SYMBOLS = getOptions("Symbol", fieldChoices.symbols);
+    	JOURNALS = getOptions("Journal", fieldChoices.journals);
+    	TRADING_MODELS = getOptions("Trading model", fieldChoices.tradingModels);
+    	ENTRY_MODELS = getOptions("Entry model", fieldChoices.entryModels);
+    }
 
 	// - - - - -
+
 	const createTradeForm = useRef(null);
 
 	const createTradeDataInitial = {
@@ -112,7 +109,7 @@ function Dashboard(props) {
 				  </div>
 
 				  <div className="flex items-center ml-auto space-x-2 sm:space-x-3">
-					  <button type="button" data-modal-target="add-trade-modal" data-modal-toggle="add-trade-modal" className="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+					  <button onClick={handleAddTradeClick} type="button" data-modal-target="add-trade-modal" data-modal-toggle="add-trade-modal" className="inline-flex items-center justify-center w-1/2 px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 sm:w-auto dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
 						  <svg className="w-5 h-5 mr-2 -ml-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
 						  Add Trade
 					  </button>
@@ -259,15 +256,12 @@ function Dashboard(props) {
 }
 
 Dashboard.propTypes = {
-	user: PropTypes.object,
 	createTrade: PropTypes.func,
+	getFieldChoices: PropTypes.func,
 }
 
-const mapStateToProps = state => ({
-	user: state.account.user,
-})
 
-export default connect(mapStateToProps, { createTrade })(Dashboard);
+export default connect(null, { createTrade, getFieldChoices })(Dashboard);
 
 
 

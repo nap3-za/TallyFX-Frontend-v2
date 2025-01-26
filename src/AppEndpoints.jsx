@@ -7,6 +7,7 @@ export const EP_LOGOUT = BASE_ENDPOINT + "knox-authentication/logout/";
 
 export const EP_TRADE_VIEWSET = BASE_ENDPOINT + "trade/";
 
+export const EP_FIELD_CHOICES = BASE_ENDPOINT + "misc/field-choices/";
 const REST_AUTH = BASE_ENDPOINT + "rest-authentication/";
 
 export const EP_RESET_PASSWORD = REST_AUTH + "password/reset/";

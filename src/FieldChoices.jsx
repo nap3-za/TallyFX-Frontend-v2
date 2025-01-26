@@ -16,7 +16,8 @@ export const ORDER_TYPES_RAW = {
 	SEL: "Sell",
 }
 
-function getOptions(field_name, field_choices_raw) {
+
+export function getOptions(field_name, field_choices_raw) {
 	let options = []
 	options.push(<option value="">{field_name}</option>)
 
@@ -29,3 +30,9 @@ function getOptions(field_name, field_choices_raw) {
 
 export const RISK_APPETITES = getOptions("Risk appetite", RISK_APPETITES_RAW);
 export const ORDER_TYPES = getOptions("Order type", ORDER_TYPES_RAW);
+
+
+// - - - -
+// Form identifiers when fetching field choices from the backend
+
+export const FC_ADD_TRADE = "ADT";
