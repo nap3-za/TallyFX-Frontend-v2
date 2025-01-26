@@ -2,10 +2,51 @@ import React, { Fragment } from "react";
 import PropTypes from  "prop-types"
 import { connect } from "react-redux";
 
+import { createTrade } from "../../reduxApp/actions/trade/actions";
+
+import { Select } from "flowbite-react";
+
+import {
+	RISK_APPETITES,
+	ORDER_TYPES,
+} from "../../FieldChoices"
+
 
 function Dashboard(props) {
 	const {user} = props;
 
+	// To be fetched from backend
+	const SYMBOLS = <>
+		<option value="">Symbols</option>
+		<option value="PLH">January</option>
+		<option value="PLH">Day Trades</option>
+		<option value="PLH">Indices</option>
+		<option value="PLH">Low Risk</option>
+	</>
+	const JOURNALS = <>
+		<option value="">Journal</option>
+		<option value="PLH">January</option>
+		<option value="PLH">Day Trades</option>
+		<option value="PLH">Indices</option>
+		<option value="PLH">Low Risk</option>
+	</>
+	const TRADING_MODELS = <>
+		<option value="">Trading models</option>
+		<option value="PLH">January</option>
+		<option value="PLH">Day Trades</option>
+		<option value="PLH">Indices</option>
+		<option value="PLH">Low Risk</option>
+	</>
+	const ENTRY_MODELS = <>
+		<option value="">Entry models</option>
+		<option value="PLH">January</option>
+		<option value="PLH">Day Trades</option>
+		<option value="PLH">Indices</option>
+		<option value="PLH">Low Risk</option>
+	</>
+
+
+	// - - - - -
 	const createTradeForm = useRef(null);
 
 	const [createTradeData, setCreateTradeData] = useState({
@@ -80,17 +121,109 @@ function Dashboard(props) {
 					<div className="p-6 space-y-6">
 						
 							<div className="grid grid-cols-6 gap-6">
+					
+								<div className="w-full">
+									<div className="mb-2 block">
+									<Label htmlFor="symbol" value="Select your symbol" />
+									</div>
+									<Select name="symbol" onChange={handleCreateTradeChange} id="symbol" required>
+										{...SYMBOLS}
+									</Select>
+								</div>
+								<div className="w-full">
+									<div className="mb-2 block">
+									<Label htmlFor="journal" value="Select your journal" />
+									</div>
+									<Select name="journal" onChange={handleCreateTradeChange} id="journal" required>
+										{...JOURNALS}
+									</Select>
+								</div>
+
+
+								<div className="w-full">
+									<div className="mb-2 block">
+									<Label htmlFor="trading_model" value="Select your trading_model" />
+									</div>
+									<Select name="trading_model" onChange={handleCreateTradeChange} id="trading_model" required>
+										{...TRADING_MODELS}
+									</Select>
+								</div>
+								<div className="w-full">
+									<div className="mb-2 block">
+									<Label htmlFor="entry_model" value="Select your entry_model" />
+									</div>
+									<Select name="entry_model" onChange={handleCreateTradeChange} id="entry_model" required>
+										{...ENTRY_MODELS}
+									</Select>
+								</div>
+
+
+								<div className="w-full">
+									<div className="mb-2 block">
+									<Label htmlFor="order_type" value="Select your order_type" />
+									</div>
+									<Select name="order_type" onChange={handleCreateTradeChange} id="order_type" required>
+										{...ORDER_TYPES}
+									</Select>
+								</div>
+								<div className="w-full">
+									<div className="mb-2 block">
+									<Label htmlFor="risk_appetite" value="Select your risk_appetite" />
+									</div>
+									<Select name="risk_appetite" onChange={handleCreateTradeChange} id="risk_appetite" required>
+										{...RISK_APPETITES}
+									</Select>
+								</div>
+
+
 								<div className="col-span-6 sm:col-span-3">
-									<label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
-									<input type="text" name="title" id="title" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="January" required onChange={handleCreateTradeChange} />
+									<label htmlFor="riskreward_profile" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+										Risk Reward
+									</label>
+									<input type="text" name="riskreward_profile" placeholder="Risk reward" onChange={handleCreateTradeChange} id="riskreward_profile" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
 								</div>
 								<div className="col-span-6 sm:col-span-3">
-									<label htmlFor="code" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code</label>
-									<input type="text" name="code" id="code" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="JAN" required onChange={handleCreateTradeChange} />
+									<label htmlFor="fill_price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+										Fill price
+									</label>
+									<input type="text" name="fill_price" placeholder="Fill price" onChange={handleCreateTradeChange} id="fill_price" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
 								</div>
+
+
+								<div className="col-span-6 sm:col-span-3">
+									<label htmlFor="exit_price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+										Exit price
+									</label>
+									<input type="text" name="exit_price" placeholder="Exit price" onChange={handleCreateTradeChange} id="exit_price" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+								</div>
+								<div className="col-span-6 sm:col-span-3">
+									<label htmlFor="stoploss_price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+										Stoploss
+									</label>
+									<input type="text" name="stoploss_price" placeholder="Stoploss" onChange={handleCreateTradeChange} id="stoploss_price" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+								</div>
+								<div className="col-span-6 sm:col-span-3">
+									<label htmlFor="takeprofit_price" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+										Takeprofit
+									</label>
+									<input type="text" name="takeprofit_price" placeholder="Takeprofit" onChange={handleCreateTradeChange} id="takeprofit_price" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+								</div>
+								<div className="col-span-6 sm:col-span-3">
+									<label htmlFor="execution_time" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+										Execution time
+									</label>
+									<input type="time" name="execution_time" placeholder="" onChange={handleCreateTradeChange} id="execution_time" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+								</div>
+								<div className="col-span-6 sm:col-span-3">
+									<label htmlFor="exit_time" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+										Exit time
+									</label>
+									<input type="time" name="exit_time" placeholder="" onChange={handleCreateTradeChange} id="exit_time" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" />
+								</div>
+
 								<div className="col-span-6">
-									<label htmlFor="adages" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Adages</label>
-									<textarea name="adages" id="adages" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Lorem ipsum dolor et" onChange={handleCreateTradeChange}></textarea>
+									<label htmlFor="trade_review" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Adages</label>
+									<textarea name="trade_review" placeholder="Lorem ipsum dolor et" onChange={handleCreateTradeChange} id="trade_review" rows="4" className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"></textarea>
 								</div>
 							</div> 
 						
