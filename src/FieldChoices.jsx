@@ -35,4 +35,4 @@ export const ORDER_TYPES = getOptions("Order type", ORDER_TYPES_RAW);
 // - - - -
 // Form identifiers when fetching field choices from the backend
 
-export const FC_ADD_TRADE = "ADT";
+export const FC_CREATE_UPDATE_TRADE = "ADT";

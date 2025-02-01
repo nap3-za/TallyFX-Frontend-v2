@@ -31,3 +31,31 @@ export const createTrade = (createTradeData) => (dispatch, getState) => {
 		})
 }
 
+export const deleteTrade = (tradeID) => (dispatch, getState) => {
+	axios.delete(EP_TRADE_VIEWSET + tradeID + "/", tokenConfigurator(getState))
+		.then(response => {
+			dispatch(createMessage("Trade deleted"));
+			dispatch({type: LOADING_OFF});
+		}).catch(error => {
+			dispatch({type: LOADING_OFF});
+			if (error.response) {
+				dispatch(raiseErrors(error.response.data, error.response.status));
+			}
+		})
+}
+
+
+export const updateTrade = (updateTradeData, tradeID) => (dispatch, getState) => {
+	axios.patch(EP_TRADE_VIEWSET + tradeID + "/", updateTradeData, tokenConfigurator(getState))
+		.then(response => {
+			dispatch(createMessage("Trade updated"));
+			dispatch({type: LOADING_OFF});
+		}).catch(error => {
+			dispatch({type: LOADING_OFF});
+			if (error.response) {
+				dispatch(raiseErrors(error.response.data, error.response.status));
+			}
+		})
+}
+
+

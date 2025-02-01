@@ -15,7 +15,7 @@ import {
 	RISK_APPETITES,
 	ORDER_TYPES,
 
-	FC_ADD_TRADE,
+	FC_CREATE_UPDATE_TRADE,
 
 	getOptions,
 } from "../../FieldChoices"
@@ -25,7 +25,9 @@ import { initFlowbite } from "flowbite";
 
 
 function CreateTrade(props) {
-
+  useEffect(() => {
+    window.initFlowbite();
+  })
 
     const [fieldChoices, setFieldChoices] = useState({
       symbols: null,
@@ -36,7 +38,7 @@ function CreateTrade(props) {
 
 	function handleCreateTradeClick(event) {
 	    const populateFieldChoices = (data) => {setFieldChoices(data)}
-      props.getFieldChoices(populateFieldChoices, FC_ADD_TRADE);
+      props.getFieldChoices(populateFieldChoices, FC_CREATE_UPDATE_TRADE);
 			
 	}
 
@@ -98,9 +100,7 @@ function CreateTrade(props) {
 	  createTradeForm.current && createTradeForm.current.reset();
 	}
 
-	// - - - -
 
-	
 	return (
 		<Fragment>
 		
